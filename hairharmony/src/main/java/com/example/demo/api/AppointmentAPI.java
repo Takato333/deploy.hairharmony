@@ -2,9 +2,14 @@ package com.example.demo.api;
 
 import com.example.demo.entity.Account;
 import com.example.demo.entity.Appointment;
+import com.example.demo.entity.Customer;
+import com.example.demo.entity.Stylist;
 import com.example.demo.exception.EntityNotFoundException;
 import com.example.demo.model.AppointmentRequest;
+import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.AppointmentRepository;
+import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.StylistRepository;
 import com.example.demo.service.AppointmentService;
 import com.example.demo.service.AuthenticationService;
 import com.example.demo.service.SlotService;
@@ -37,6 +42,12 @@ public class AppointmentAPI {
     @Autowired
     SlotService slotService;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Autowired
+    StylistRepository stylistRepository;
+
     @PostMapping
     public ResponseEntity createAppointment(@RequestBody AppointmentRequest appointmentRequest) {
         Appointment appointment = appointmentService.createAppointment(appointmentRequest);
@@ -60,13 +71,19 @@ public class AppointmentAPI {
         List<Appointment> appointments = appointmentRepository.findAppointmentByIsDeletedFalse();
         return ResponseEntity.ok(appointments);
     }
-
-    @GetMapping("{customerId}")
+    @GetMapping("/customer/{customerId}")
     public ResponseEntity getAllAppointmentsByCustomer(@PathVariable long customerId) {
-        Account account = authenticationService.getCurrentAccount();
+        Customer customer = customerRepository.findCustomerById(customerId);
+        Account account = customer.getAccount();
         List<Appointment> appointments = appointmentRepository.findAppointmentByCustomer(account);
         return ResponseEntity.ok(appointments);
     }
+
+    @GetMapping("/stylist/{stylistId}")
+    public List<Appointment> getAppointmentsByStylistId(@PathVariable long stylistId) {
+        return appointmentService.findAppointmentsByStylistId(stylistId);
+    }
+
 
     @GetMapping("{appointmentId}")
     public ResponseEntity getAppointment(@PathVariable UUID appointmentId) {

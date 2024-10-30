@@ -271,13 +271,18 @@ public class AppointmentService {
         }
 
 
-//Tìm appoint bằng ID
+    //Tìm appoint bằng ID
     public Appointment getAppointmentById(UUID appointmentId) {
         Appointment appointment = appointmentRepository.findAppointmentById(appointmentId);
         if(appointment == null){
             throw new EntityNotFoundException("Không tìm thấy cuộc hẹn!");
         }
         return appointment;
+    }
+
+    //Tìm cuộc hẹn bằng StylistId
+    public List<Appointment> findAppointmentsByStylistId(long stylistId) {
+        return appointmentRepository.findAppointmentsByStylistId(stylistId);
     }
 
 

@@ -23,4 +23,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     List<Feedback> findByStylistAndRatingGreaterThanEqualAndIsDeletedFalse(Account stylist, int rating);
 
+    long countByRating(int rating);
+
+
 }

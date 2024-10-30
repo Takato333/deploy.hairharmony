@@ -53,7 +53,6 @@ public class Account implements UserDetails {
 
     String sex;
 
-    @JsonIgnore
     float balance = 0;
 
     @Override

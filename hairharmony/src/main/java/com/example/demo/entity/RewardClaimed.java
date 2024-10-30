@@ -5,29 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Entity
 @Data
-public class Reward {
+public class RewardClaimed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     long id;
 
-    String name;
-
-    String image;
-
-    String description;
-
-    int loyaltyPointRequire;
-
     @JsonIgnore
     boolean isDeleted = false;
 
-    @OneToMany(mappedBy = "reward")
-    @JsonIgnore
-    List<RewardClaimed> rewards;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "reward_id")
+    Reward reward;
 }

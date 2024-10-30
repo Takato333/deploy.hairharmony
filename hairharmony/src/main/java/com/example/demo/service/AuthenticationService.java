@@ -10,7 +10,6 @@ import com.example.demo.model.*;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.CustomerRepository;
 import com.example.demo.repository.StylistRepository;
-import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -82,7 +81,7 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
             emailDetail.setSubject("Chào mừng "+ newAccount.getFullName() +" đên với HairHarmony! ");
-            emailDetail.setLink("https://www.google.com/");
+            emailDetail.setLink("http://localhost:5173/");
             emailService.sendWelcomeEmail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);
@@ -161,7 +160,7 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Xác nhận đặt lại mật khẩu");
-            emailDetail.setLink("http://localhost:5137/reset-password?token=" + tokenService.generateToken(account));
+            emailDetail.setLink("http://localhost:5173/reset-password?token=" + tokenService.generateToken(account));
             emailService.sendResetPasswordEmail(emailDetail);
         }
     }
@@ -205,4 +204,60 @@ public class AuthenticationService implements UserDetailsService {
 //            return Optional.empty();
 //        }
 //    }
+    public AccountResponse loginG(OAuth loginRequest) {
+        try {
+            //làm hàm create account ở đây
+    //            cho đại sdt vs mk là gì đấy mà ko bao giờ cần đến
+            Account account = createAccountsFromGoogle(loginRequest);
+            //lấy thông tin ng dùng và cast về account
+            AccountResponse accountResponse = modelMapper.map(account, AccountResponse.class);
+            accountResponse.setToken(tokenService.generateToken(account));
+            return accountResponse;
+        } catch (Exception e) {
+
+            //error => throw new exception
+            e.printStackTrace();
+            throw new EntityNotFoundException("Email hoặc mặt khẩu bị sai!!!");
+        }
+    }
+
+
+
+    public Account createAccountsFromGoogle(OAuth loginRequest) {
+        // Check if an account with this email already exists
+        Optional<Account> existingAccount = accountRepository.findByEmail(loginRequest.getEmail());
+
+        if (existingAccount.isPresent()) {
+            return existingAccount.get();
+        }
+
+        // If account doesn't exist, create a new one
+        Account newAccount = new Account();
+        newAccount.setFullName(loginRequest.getName());
+        newAccount.setEmail(loginRequest.getEmail());
+        newAccount.setImage(loginRequest.getAvatar());
+
+        // Generate placeholder phone and password
+        newAccount.setPhone("0900000000"); // Placeholder phone number
+        newAccount.setPassword("OAuthGeneratedPassword123"); // Placeholder password
+
+        // Set default role (e.g., CUSTOMER) if not specified by OAuth
+        newAccount.setRole(Role.CUSTOMER);
+
+        // Save new account in the database
+        return accountRepository.save(newAccount);
+    }
+
+    public Account findOrCreateAccount(String email) {
+        // Implement your logic to find or create an account based on the email
+        // For example:
+        return accountRepository.findByEmail(email).orElseGet(() -> {
+            Account newAccount = new Account();
+            newAccount.setEmail(email);
+            // Set other fields as necessary
+            return accountRepository.save(newAccount);
+        });
+    }
+
+
 }

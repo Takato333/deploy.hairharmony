@@ -2,19 +2,23 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.Reward;
+import com.example.demo.entity.RewardClaimed;
 import com.example.demo.entity.ServiceEntity;
 import com.example.demo.exception.DuplicateEntity;
 import com.example.demo.exception.EntityNotFoundException;
-import com.example.demo.model.RewardRequest;
-import com.example.demo.model.ServiceRequest;
-import com.example.demo.model.ServiceResponse;
+import com.example.demo.model.*;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.CustomerRepository;
+import com.example.demo.repository.RewardClaimedRepository;
 import com.example.demo.repository.RewardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RewardService {
@@ -24,6 +28,9 @@ public class RewardService {
 
     @Autowired
     CustomerRepository customerRepository;
+
+    @Autowired
+    RewardClaimedRepository rewardClaimedRepository;
 
     //Create
     public Reward createReward(RewardRequest rewardRequest) {
@@ -83,18 +90,41 @@ public class RewardService {
         if (customer.getLoyaltyPoint() >= reward.getLoyaltyPointRequire()) {
             // Trừ loyaltyPoint tương ứng với số điểm yêu cầu
             customer.setLoyaltyPoint(customer.getLoyaltyPoint() - reward.getLoyaltyPointRequire());
-
-            // Gán customer cho reward và lưu lại
-            reward.setCustomer(customer);
-            rewardRepository.save(reward);
-
-            // Lưu lại thông tin của customer sau khi trừ điểm
             customerRepository.save(customer);
+
+            // Tạo một RewardClaimed mới để lưu lại giao dịch
+            RewardClaimed rewardClaimed = new RewardClaimed();
+            rewardClaimed.setCustomer(customer);
+            rewardClaimed.setReward(reward);
+
+            // Lưu thông tin RewardClaimed
+            rewardClaimedRepository.save(rewardClaimed);
 
             return "Nhận quà thành công!";
         } else {
             return "Quý khách chưa tích đủ số điểm để nhận phần quà này!";
         }
+    }
+
+    //show cho customer thấy những reward mình đã đặt
+    public List<Reward> getRewardsByCustomerId(Long customerId) {
+        List<RewardClaimed> rewardClaimedList = rewardClaimedRepository.findAllByCustomerId(customerId);
+
+        // Chuyển đổi danh sách RewardClaimed thành danh sách Reward để giữ tất cả các phần thưởng
+        return rewardClaimedList.stream()
+                .map(RewardClaimed::getReward)
+                .collect(Collectors.toList());
+    }
+
+    //show tất cả reward mà tất cả customer đặt
+    public RewardClaimedResponse getAllRewardClaimed(int page, int size) {
+        Page rewardClaimedPage = rewardClaimedRepository.findAll(PageRequest.of(page, size));
+        RewardClaimedResponse rewardClaimedResponse = new RewardClaimedResponse();
+        rewardClaimedResponse.setTotalPages(rewardClaimedPage.getTotalPages());
+        rewardClaimedResponse.setContent(rewardClaimedPage.getContent());
+        rewardClaimedResponse.setPageNumber(rewardClaimedPage.getNumber());
+        rewardClaimedResponse.setTotalElements(rewardClaimedPage.getTotalElements());
+        return rewardClaimedResponse;
     }
 
 

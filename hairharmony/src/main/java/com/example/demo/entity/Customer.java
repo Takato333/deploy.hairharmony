@@ -41,7 +41,7 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer")
             @JsonIgnore
-    Set<Reward> reward;
+    Set<RewardClaimed> reward;
 
 
 }

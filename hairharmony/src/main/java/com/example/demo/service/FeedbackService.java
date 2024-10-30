@@ -1,14 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.Account;
-import com.example.demo.entity.Feedback;
-import com.example.demo.entity.Manager;
-import com.example.demo.entity.ServiceEntity;
+import com.example.demo.entity.*;
 import com.example.demo.model.FeedbackRequest;
 import com.example.demo.model.FeedbackResponse;
 import com.example.demo.repository.AccountRepository;
 import com.example.demo.repository.FeedbackRepository;
 import com.example.demo.repository.ServiceRepository;
+import com.example.demo.repository.StylistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +23,20 @@ public class FeedbackService {
     AuthenticationService authenticationService;
 
     @Autowired
-    AccountRepository accountRepository;
+    StylistRepository stylistRepository;
 
     @Autowired
     ServiceRepository serviceRepository;
 
 
     public Feedback createNewFeedback(FeedbackRequest feedbackRequest) {
-        Account stylist = accountRepository.findById(feedbackRequest.getStylistId())
+        Stylist stylist = stylistRepository.findById(feedbackRequest.getStylistId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy thợ!"));
+
+        // Get the Account associated with this stylist
+        Account stylistAccount = stylist.getAccount();
+
+
 
         ServiceEntity service = serviceRepository.findById(feedbackRequest.getServiceId())
                 .orElseThrow(() -> new EntityNotFoundException("Không tìm thấy dịch vụ!"));
@@ -43,7 +46,7 @@ public class FeedbackService {
         feedback.setRating(feedbackRequest.getRating());
         feedback.setCustomer(authenticationService.getCurrentAccount());
         feedback.setService(service);
-        feedback.setStylist(stylist);
+        feedback.setStylist(stylistAccount);
         return feedbackRepository.save(feedback);
     }
 

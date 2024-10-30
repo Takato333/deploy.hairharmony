@@ -28,14 +28,17 @@ public class Transactions {
     float amount;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "from_id")
     Account from;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "to_id")
     Account to;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "payment_id")
     Payment payment;
 

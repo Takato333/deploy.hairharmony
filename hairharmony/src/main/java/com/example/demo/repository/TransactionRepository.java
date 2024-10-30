@@ -1,6 +1,8 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.Transactions;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,6 @@ public interface TransactionRepository extends JpaRepository<Transactions, Long>
             " GROUP BY YEAR(t.createAt), MONTH(t.createAt)" +
             "ORDER BY YEAR(t.createAt), MONTH(t.createAt) ")
     List<Object[]> calculateMonthlyRevenue(@Param("userId") long userId );
+
+    Page<Transactions> findAll(Pageable pagable);
 }

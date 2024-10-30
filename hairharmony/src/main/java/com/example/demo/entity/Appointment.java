@@ -47,8 +47,6 @@ public class Appointment {
 
 
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @ToString.Exclude
-    @JsonIgnore
     List<AppointmentDetail> appointmentDetails;
 
     @OneToOne(mappedBy = "appointment")
