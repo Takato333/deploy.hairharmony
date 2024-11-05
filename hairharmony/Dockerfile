@@ -10,8 +10,8 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-jdk-slim
 WORKDIR /app
 
-COPY --from=build /app/target/Drcomputer-0.0.1-SNAPSHOT.war drcomputer.war
+COPY --from=build /app/target/hairharmony-0.0.1-SNAPSHOT.war hairharmony.war
 EXPOSE 8080 
 
-ENTRYPOINT ["java","-jar","drcomputer.war"]
+ENTRYPOINT ["java","-jar","hairharmony.war"]
 
