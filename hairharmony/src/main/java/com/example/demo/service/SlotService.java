@@ -35,7 +35,7 @@ public class SlotService {
         slot.setStartTime(startTime);
         slot.setEndTime(endTime);
         slot.setStylistStatus(StylistStatus.BOOKED); // Set the status to BOOKED when booked
-        slot.setSlotStylist(stylistRepository.findStylistById(stylistId)); // Link to the stylist
+        slot.setSlotStylist(stylistRepository.findStylistByIdAndIsDeletedFalse(stylistId)); // Link to the stylist
         slot.setAppointmentDetail(appointmentDetail); // Link to the appointment detail
 
         // Save the new slot

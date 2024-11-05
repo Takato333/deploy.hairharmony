@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface ServiceRepository extends JpaRepository<ServiceEntity, UUID> {
-    ServiceEntity findServiceById(UUID id);
+    ServiceEntity findServiceByIdAndIsDeletedFalse(UUID id);
     ServiceEntity findServiceByName(String name);
     List<ServiceEntity> findServiceByIsDeletedFalse();
     List<ServiceEntity> findServiceByType(String type);

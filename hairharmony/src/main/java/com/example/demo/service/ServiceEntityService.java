@@ -66,7 +66,7 @@ public class ServiceEntityService {
     }
 
     public ServiceEntity getServiceById(UUID id){
-        ServiceEntity service = serviceRepository.findServiceById(id);
+        ServiceEntity service = serviceRepository.findServiceByIdAndIsDeletedFalse(id);
         if(service == null){
             throw new EntityNotFoundException("Không tìm thấy dịch vụ!");
         }
