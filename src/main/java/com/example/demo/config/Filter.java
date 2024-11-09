@@ -37,6 +37,7 @@ public class Filter extends OncePerRequestFilter {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
+            "https://deploy-hairharmony.onrender.com/",
             "/api/login",
             "/api/register",
             "/api/forgot-password",
