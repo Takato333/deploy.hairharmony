@@ -91,9 +91,9 @@ public class AuthenticationAPI {
                 Account account = authenticationService.findOrCreateAccount(email); // Implement this method based on your logic
 
                 // Generate JWT token
-                String token = tokenService.generateToken(account);
+                String jwtToken = tokenService.generateToken(account);
 
-                return ResponseEntity.ok(token);
+                return ResponseEntity.ok(jwtToken);
             } else {
                 return ResponseEntity.status(401).body("Invalid Google token");
             }

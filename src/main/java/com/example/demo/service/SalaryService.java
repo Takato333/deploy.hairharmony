@@ -109,7 +109,7 @@ public class SalaryService {
 
     private float calculateCommissionByFeedback(long stylistId) {
         // Retrieve feedback with ratings >=4 stars for this stylistt
-        Stylist findStylist = stylistRepository.findStylistByIdAndIsDeletedFalse(stylistId);
+        Stylist findStylist = stylistRepository.findStylistById(stylistId);
         if(findStylist == null) {
             throw new EntityNotFoundException("Không có thợ!");
         }

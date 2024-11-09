@@ -81,7 +81,7 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
             emailDetail.setSubject("Chào mừng "+ newAccount.getFullName() +" đên với HairHarmony! ");
-            emailDetail.setLink("http://localhost:5173/");
+            emailDetail.setLink("https://www.google.com/");
             emailService.sendWelcomeEmail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);

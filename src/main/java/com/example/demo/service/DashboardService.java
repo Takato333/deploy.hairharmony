@@ -7,7 +7,6 @@ import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -140,24 +139,34 @@ public class DashboardService {
         return stats;
     }
 
-    public Map<String, Object> getStylistDashboard(Long stylistId, LocalDateTime startOfMonth) {
-        Map<String, Object> dashboard = new HashMap<>();
-
-        // Lấy số lượng cuộc hẹn đã đặt cho stylist theo stylistId trong tháng hiện tại
-        int totalBookedAppointments = appointmentDetailRepository.countBookedAppointmentsByStylistId(stylistId, startOfMonth);
-
-        // KPI appointment
-        int kpiAppointment = 50;
-
-        // Tính toán KPI đạt được
-        boolean kpiMet = totalBookedAppointments >= kpiAppointment;
-
-        dashboard.put("totalBookedAppointments", totalBookedAppointments);
-        dashboard.put("kpiAppointment", kpiAppointment);
-        dashboard.put("kpiMet", kpiMet);
-
-        return dashboard;
-    }
+//    public Map<String, Object> getStylistDashboardMonthlyData() {
+//        Map<String, Object> dashboardData = new HashMap<>();
+//        Account account = authenticationService.getCurrentAccount();
+//
+//        if (account == null) {
+//            throw new EntityNotFoundException("Bạn cần đăng nhập trước");
+//        }
+//
+//        // Kiểm tra nếu tài khoản là stylist
+//        if (!account.getRole().equals(Role.STYLIST)) {
+//            throw new EntityNotFoundException("Bạn không có quyền truy cập vào dashboard của stylist");
+//        }
+//
+//        List<Object[]> monthlyData = appointmentDetailRepository.calculateMonthlyAppointmentAndEarnings(account.getId());
+//        List<Map<String, Object>> monthlyDataList = new ArrayList<>();
+//
+//        for (Object[] result : monthlyData) {
+//            Map<String, Object> monthData = new HashMap<>();
+//            monthData.put("year", result[0]);
+//            monthData.put("month", result[1]);
+//            monthData.put("totalAppointments", result[2]);
+//            monthData.put("totalEarnings", result[3]);
+//            monthlyDataList.add(monthData);
+//        }
+//
+//        dashboardData.put("monthlyData", monthlyDataList);
+//        return dashboardData;
+//    }
 
 
 

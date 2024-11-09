@@ -81,7 +81,7 @@ public class StylistService {
 
     //U
     public Stylist updateStylist(long id, StylistRequest stylist) {
-        Stylist oldStylist =  stylistRepository.findStylistByIdAndIsDeletedFalse(id);
+        Stylist oldStylist =  stylistRepository.findStylistById(id);
 
         if(oldStylist == null) throw new EntityNotFoundException("Không tìm thấy thợ!");
 
@@ -112,7 +112,7 @@ public class StylistService {
     }
 
     public Stylist getStylistById(long id) {
-        Stylist stylist = stylistRepository.findStylistByIdAndIsDeletedFalse(id);
+        Stylist stylist = stylistRepository.findStylistById(id);
         if(stylist == null) throw new EntityNotFoundException("Không tìm thấy thợ!");
         return stylist;
     }
