@@ -32,6 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-# Ignore sensitive configuration files
-src/main/resources/fcm-credentials.json
 
