@@ -34,10 +34,10 @@ public class Filter extends OncePerRequestFilter {
 
     //truy cập ko cần token
     private final List<String> AUTH_PERMISSION = List.of(
+            "/",
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
-            "https://deploy-hairharmony.onrender.com/",
             "/api/login",
             "/api/register",
             "/api/forgot-password",
