@@ -155,7 +155,7 @@ public class AppointmentStatusService {
         EmailDetail emailDetail = new EmailDetail();
         emailDetail.setReceiver(customer);
         emailDetail.setSubject("Cảm ơn quý khách " + customer.getFullName() + " đã đặt lịch tại HairHarmony!");
-        emailDetail.setLink("https://fe-hairsalon.vercel.app/login" + appointment.getId());
+        emailDetail.setLink("https://hairharmony.vercel.app/login" + appointment.getId());
 
         // Gửi email
         emailService.sendAppointmentEmail(emailDetail);
