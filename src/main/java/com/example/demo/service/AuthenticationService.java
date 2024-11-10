@@ -81,7 +81,7 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(newAccount);
             emailDetail.setSubject("Chào mừng "+ newAccount.getFullName() +" đên với HairHarmony! ");
-            emailDetail.setLink("https://fe-hairsalon.vercel.app/");
+            emailDetail.setLink("https://hairharmony.vercel.app/");
             emailService.sendWelcomeEmail(emailDetail);
 
             return modelMapper.map(newAccount, AccountResponse.class);
@@ -160,7 +160,7 @@ public class AuthenticationService implements UserDetailsService {
             EmailDetail emailDetail = new EmailDetail();
             emailDetail.setReceiver(account);
             emailDetail.setSubject("Xác nhận đặt lại mật khẩu");
-            emailDetail.setLink("https://fe-hairsalon.vercel.app/reset-password?token=" + tokenService.generateToken(account));
+            emailDetail.setLink("https://hairharmony.vercel.app/reset-password?token=" + tokenService.generateToken(account));
             emailService.sendResetPasswordEmail(emailDetail);
         }
     }
