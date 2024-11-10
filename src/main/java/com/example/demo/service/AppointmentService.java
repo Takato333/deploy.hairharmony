@@ -140,7 +140,7 @@ public class AppointmentService {
         String tmnCode = "ME80UKBD";
         String secretKey = "XIT7V7N01GATX36R6O8OVND0T98G74N6"; //check mail vì có thể thay đổi
         String vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        String returnUrl = "https://fe-hairsalon.vercel.app/success?appointmentID=" + appointments.getId(); //để đúng appointmentID để vào đúng trang thanh toán thành công bên frontend
+        String returnUrl = "https://hairharmony.vercel.app/success?appointmentID=" + appointments.getId(); //để đúng appointmentID để vào đúng trang thanh toán thành công bên frontend
         String currCode = "VND";
 
         Map<String, String> vnpParams = new TreeMap<>();
